@@ -937,6 +937,8 @@ function generateVideoStylesheet(){
 function generateStylesheet(){
     // CORE POSITIONING CSS
     var css = "\n\t html{height: 100%; overflow:hidden; background-color: #000;}"
+    css += "\n\ta:link, a:visited{color: #333333;}"
+    css += "\n\ta:hover, a:active{color: #777777;}"
     css += "\n\tbody {position: relative;height: 100%; margin: 0;padding: 0;color: #555555;font-family: Helvetica, sans-serif, verdana, arial;font-size: 12px; background-color:  #96999D;}"
     css += "\n\t#header{height: 100px;position:relative;border-top: 1px solid #727579;"+fade('top','#ffffff', '#777777')+"}"
     css += "\n\t#content{background-color: #ffffff; border-top: 1px solid #727579; border-bottom: 1px solid #727579;z-index: 10;display: block;position:absolute;height:auto; bottom:20px; left: 0; right: 0; top: 100px;}"
