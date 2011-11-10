@@ -8,7 +8,7 @@ When linked into the head tag of an HTML file:
 
 browseTunes creates the familiar 'Genre -> Artist -> Album -> Track' Navigation system of the original iTunes. Drag and Drop or upload your exported iTunes Music Library and browseTunes parses the library into your browser's local storage. A Genre, Artist, Album and Track database is created to store the index locally of all your content.  Browse content by clicking on any of the Genre, Artist or Album Tags and play content by clicking on the Track.
 
-Features include:
+# Features:
 
  * Drag and Drop / 'Upload' iTunes Library
  * Audio and Video Playback in the browser
@@ -23,7 +23,7 @@ Features include:
 Dedicated, in loving memory, to the original iTunes. With it's lightweight footprint and Genre -> Artist -> Album -> Track navigation system.
 You were missed.
 
-Instructions:
+# Instructions:
 
  * STEP 1: Put browseTunes and index.html in your iTunes Directory.
  * STEP 2: Export your iTunes Library to xml.
@@ -33,7 +33,7 @@ Open iTunes. Chose 'File', 'Libary', 'Export Libary' and save Library.xml to you
 * STEP 3: Open index.html in your web browser. ** See Note 1.
 * STEP 4: Drag and Drop or Upload your Library.xml
 
-Disclaimer:
+# Disclaimer:
 
  * NOTE 1: Mp3 = Safari/Chrome, Ogg = Firefox
 If you music and video is encoded to Mp3 and Quicktime,this will ONLY WORK IN SAFARI OR CHROME. If your music is encoded to Ogg, this WILL ONLY WORK IN FIREFOX.
@@ -42,8 +42,8 @@ Will not work with protected media bought through iTunes.
  * NOTE 3:You media folder will need to be accessible.
 Otherwise you will get a Forbidden 403 error.
 
-MIT License:
-browseTunes (c) 2011 Ty Rauber
+# MIT License:
+browseTunes (c) 2011 Ty Rauber, tyrauber@mac.com
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
