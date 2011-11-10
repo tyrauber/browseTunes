@@ -19,10 +19,8 @@ var rewindBTN= "<svg class='rewindBTN' width='25' height='25' xmlns='http://www.
 var setup = "<br/>Drag and drop your exported iTunes Library.xml";
 var videoWindow = false;
 var db;
-//var params;
 var library;
 var tagInterval = 2;
-
 var currentObj = new Object();
 
 
@@ -47,7 +45,6 @@ function initVideo(params){
         if(!intb){
             intb = true;
             if(document.getElementById('mediaPlayer')){
-                // alert(document.getElementById('mediaPlayer').loaded())
                 clearInterval(interval)
                 load(params["id"])
             }
@@ -59,7 +56,6 @@ function initVideo(params){
 try {
     if (window.openDatabase) {
         var dbSize = 5 * 1024 * 1024; // 5MB
-        //var dbSize = 25 * 1024 * 1024; // 50MB
         db = openDatabase("browseTunes", "1.0", "browseTunes :: HTML 5, 100% Javascript iTunes-like Media Player", dbSize);
         if (!db)
             alert("Failed to open the database on disk.  This is probably because the version was bad or there is not enough space left in this domain's quota");
@@ -200,7 +196,6 @@ function importTrack(i){
         return;
     }else{
         getTrack(library[i])
-        //  document.getElementById('artist_display').innerHTML = "-"
         document.getElementById('progress_bar').style.width = ((i / library.length)*100 +"%")
         document.getElementById('time_display').innerHTML = i;
         document.getElementById('time_remaining').innerHTML = "-"+(library.length-i);
@@ -212,7 +207,6 @@ function importTrack(i){
         var intv = setInterval(function(){
             if(!ib){
                 ib = true;
-                //  document.getElementById('artist_display').innerHTML = ""
                 if(currentObj && !currentObj["genre_id"]){newTag(currentObj, 'genre');}
                 if(currentObj && currentObj["genre_id"] && !currentObj["artist_id"]){newTag(currentObj, 'artist');}
                 if(currentObj && currentObj["genre_id"] && currentObj["artist_id"] && !currentObj["album_id"]){newTag(currentObj, 'album');}
@@ -223,7 +217,6 @@ function importTrack(i){
                 if(currentObj && currentObj["genre_id"]&& currentObj["artist_id"] && currentObj["album_id"] && currentObj["track_id"]){
                     clearInterval(intv)
                     importTrack(++i)
-                    // document.getElementById('artist_display').innerHTML = "*"
                 }
                 ib=false;
             }
@@ -266,14 +259,11 @@ db.onSuccess = function(tx, result, currentObj, ul, li) {
 db.onError = function(tx, result, currentObj, ul, li){
     if(ul.id == "track"){var name = li.nameField.innerHTML;
     }else{name = li.link.innerHTML;}
-    //  document.getElementById('log').innerHTML += ul.id+" "+name+" :: "
     db.readTransaction(function(tx) {
         tx.executeSql('SELECT id FROM '+ul.id+'s WHERE name = ?', [name], function (tx, result) {
             if(result.rows.length != 0){
-                //  document.getElementById('log').innerHTML += ul.id+"<br/>"
                 currentObj[ul.id+"_id"] =  result.rows.item(0).id;
             }
-
         });
     })
 };
@@ -285,7 +275,6 @@ function getTrack(obj){
     for(var i=0; i<= keys.length; i++){
         if (keys[i] && keys[i]!=undefined && i >= 1){
             if (keys[i].tagName == "key" && keys[i].hasChildNodes()){
-                // if (keys[i].hasChildNodes()){
                 if (keys[i].textContent == "Genre"){
                     currentObj["genre"] = keys[i+1].textContent
                 }
@@ -300,9 +289,7 @@ function getTrack(obj){
                     currentObj["artist"] = keys[i+1].textContent
                 }
                 if (keys[i].textContent == "Name"){
-                    currentObj["name"] = keys[i+1].textContent.replace(" - ", " &#45; ")
-                  //  currentObj["name"] = keys[i+1].textContent
-                 //   currentObj["name"] = currentObj["name"].split(" - ")[1]
+                    currentObj["name"] = keys[i+1].textContent      
                 }
                 if (keys[i].textContent == "Album"){
                     currentObj["album"] = keys[i+1].textContent
@@ -397,9 +384,7 @@ function loadTracks(id){
                 track.height = row['height'];
                 track.width = row['width'];
                 track.onClick =  track.id;
-
-                //var obj = {"genre":track.genre, "artist":track.artist, "album":track.album}
-
+                
                 var cls = "item "+getOddOrEven(track._id)
                 cls += " genre_"+track.genre_id+" artist_"+track.artist_id+" album_"+track.album_id
                 track.cls = cls;
@@ -439,8 +424,6 @@ function newTrack(obj){
     }else{
         track.permalink = track.genre_id+"_"+track.artist_id+"_"+track.album_id+"_"+makePermalink(track.name);
     }
-    // document.getElementById("log").innerHTML += "("+track._id+"):: genre_"+highestID.genre+", artist_"+highestID.artist+", album_"+highestID.album+"<br/>"
-
 
     var cls = "item "+getOddOrEven(track.order)
     cls += " genre_"+track.genre_id+" artist_"+track.artist_id+" album_"+track.album_id
@@ -451,47 +434,36 @@ function newTrack(obj){
 function Track(){
 
     var ul = document.getElementById('track')
-    // "<li id='"+id+"' num='"+i+"' class='item "+iter+" "+cls+"'><a href='#' onclick='select(\""+id+"\", \"track\")' rel='"+track["url"]+"' kind='"+track["kind"]+"' width='"+track["width"]+"' height='"+track["height"]+"' genre='"+track["genre"]+"'><span class='name'>"+track["name"]+"</span><span class='artist'>"+track['artist']+"</span><span class='album'>"+track['album']+"</span><span class='time'>"+formatTime(track['time']/1000)+"</span></a></li>";
 
     var self = this;
     var li = document.createElement('li');
     this.li= li;
 
-    //  Link
     var link = document.createElement('a');
     link.setAttribute('href', '#');
-
     this.link = link;
     li.appendChild(link);
 
-    //  Track Name
     var name = document.createElement('span');
     name.className = "name";
     this.nameField = name;
     this.link.appendChild(name);
 
-    // Artist Name
     var artist = document.createElement('span');
     artist.className = "artist";
     this.artistField = artist;
     this.link.appendChild(artist);
 
-    // Album Name
     var album = document.createElement('span');
     album.className = "album";
     this.albumField = album;
     this.link.appendChild(album);
 
-    // Time
     var time = document.createElement('span');
     time.className = "time";
     this.timeField = time;
     this.link.appendChild(time);
 
-    // currentLI = li;
-    //currentUL = ul;
-    
-    // ul.appendChild(li);
     return this;
 }
 
@@ -706,13 +678,10 @@ function formatTime(seconds) {
     return minutes + ":" + seconds;
 }
 
-
-// isEven; Returns true or false. Enables color coding of odd and even lines.
 var isEven = function(someNumber){
     return (someNumber%2 == 0) ? true : false;
 };
 
-// getOddorEven(i); returns the appropriate class
 function getOddOrEven(i){
     if(isEven(i)== true){
         var cls='even'
@@ -747,9 +716,6 @@ function makePermalink(val){
     }
 }
 
-
-// mediaPlayer(); Returns the proper player: audio or video
-
 function mediaPlayer(){
     if(!document.getElementById('mediaPlayer') && videoWindow && !videoWindow.closed){
         return videoWindow.document.getElementById('mediaPlayer')
@@ -759,8 +725,6 @@ function mediaPlayer(){
         return false;
     }
 }
-
-// reloadPlayer(li); loads the proper html media tag and window depending on content type.
 
 function reloadPlayer(li){
     var track = li.childNodes[0]
@@ -791,26 +755,15 @@ function reloadPlayer(li){
 
 }
 
-
-// load(li); loads a track for playback
-
 function load(li){
-    // alert(li.childNodes[0].getAttribute('kind'))
+
     var kind =  li.childNodes[0].getAttribute('kind')
     if(mediaPlayer() == false || mediaPlayer().tagName != kind){
         reloadPlayer(li);
     }
     var ldtmr = setInterval(function() {
         if(mediaPlayer() != false){
-            /*var files = document.getElementById("myfile");
-            files.value =  li.childNodes[0].getAttribute('rel');
-  
-            var reader = new FileReader();
-            reader.onloadend = function() {
-                mediaPlayer().src = reader.result;
-            }
-            reader.readAsDataURL(files.file[0]);
-             */
+
             mediaPlayer().setAttribute('src', li.childNodes[0].getAttribute('rel'));
             mediaPlayer().setAttribute('num', li.getAttribute('num'));
             mediaPlayer().setAttribute('current', li.id);
@@ -863,7 +816,6 @@ function select(id,type){
     }else if(type == "album"){
         var l = [["track", li.id]];
     } else if(type == "track"){
-        //  li.className = 'selected '+li.className;
         load(li);
     }
     for(var x in l){
@@ -885,7 +837,7 @@ function selectList(list, current){
 
 }
 
-// continuedPlayback(); ensures continues playback
+
 function continuedPlayback(){
     mediaPlayer().addEventListener('ended',nextHandler,false);
     function nextHandler(e) {
@@ -895,16 +847,6 @@ function continuedPlayback(){
         forward();
     }
 }
-
-// loadFirstTrack(); Am I even using this?
-
-function loadFirstTrack(){
-    var first = document.getElementById('track').childNodes[0].firstChild
-    mediaPlayer().setAttribute('src', first.rel);
-    mediaPlayer().setAttribute('num', first.id);
-}
-
-// changeVolume(m); changes volume based on slider
 
 function changeVolume(m) {
     var p = m.parentNode;
@@ -917,7 +859,6 @@ function changeVolume(m) {
     }
 }
 
-// scrubPosition(m); moves time relative to position slider
 function scrubPosition(m) {
     var p = m.parentNode;
     var val = window.event.clientX-p.offsetWidth;
@@ -931,8 +872,6 @@ function scrubPosition(m) {
 
 }
 
-// updateTime(); updates the display time and progress bar
-
 function updateTime(){
     mediaPlayer().addEventListener('timeupdate',playHandler,false);
 
@@ -940,7 +879,7 @@ function updateTime(){
         if(!e) {
             e = window.event;
         }
-        // What you want to do after the event
+
         document.getElementById('progress').style.display = "block";
         document.getElementById('time_display').innerHTML = formatTime(mediaPlayer().currentTime);
         document.getElementById('time_remaining').innerHTML = "-"+formatTime(mediaPlayer().duration-mediaPlayer().currentTime);
@@ -949,7 +888,6 @@ function updateTime(){
 
 }
 
-// updateTime(); updates the display for track, artist and album name
 function updateDisplay(string){
     var tags = string.getElementsByTagName('span')
     document.title = "browseTunes | Now Playing :  "+tags[0].innerHTML+" - "+tags[1].innerHTML+" - "+tags[2].innerHTML
@@ -957,7 +895,7 @@ function updateDisplay(string){
     document.getElementById('artist_display').innerHTML = tags[1].innerHTML+" - "+tags[2].innerHTML
 }
 
-// play(); plays and pauses track
+
 function play(){
     if (mediaPlayer().paused){
         document.getElementById('playButton').innerHTML= pauseBTN;
@@ -969,7 +907,7 @@ function play(){
     }
 }
 
-/// rewind(); goes to the previous track
+
 function rewind(){
     var ul = document.getElementById('track')
     var li = ul.getElementsByClassName('selected')[0]
@@ -978,7 +916,7 @@ function rewind(){
     }
 }
 
-/// forward(); goes to the next track
+
 function forward(){
     var ul = document.getElementById('track')
     var li = ul.getElementsByClassName('selected')[0]
@@ -1071,144 +1009,3 @@ function fade(position, start, end){
 }
 
 addEventListener('load', prepareDB, false);
-
-// SAFE
-/*
-db.onError = function(tx, result, ul, li){
-    // alert("tag error? "+result.message)
-    // document.getElementById('log').innerHTML += "*** Error "+result.message+"<br/>"
-    db.readTransaction(function(tx) {
-        // alert("SELECT * FROM "+ul.id+" WHERE name = "+li.link.innerHTML)
-        tx.executeSql("SELECT id FROM "+ul.id),
-        function(tx, results, ul, li) {
-            currentObj[ul.id+"_id"] =  rows.item(0).id;
-            alert("Found "+ul.id+"_id"+" "+currentObj[ul.id+"_id"])
-            currentID[ul.id+"_id"] = rows.item(0).id;
-        }, function(tx, results, ul, li) {alert(results.message)}
-    });
-};
- */
-
-
-
-/*  OLD Broken SHIT
-
-function readTrack(file) {
-    alert(file)
-    var reader = new FileReader();
-    reader.onload = function(event) {
-        window.url = event.target.result;
-
-    };
-    reader.onerror = function() {
-        document.getElementById('track_display').innerHTML = 'Unable to read ' + file.fileName;
-    };
-    reader.readAsText(file);
-
-}
-
-function createRecord(currentObj){
-    var intb= false;var i=0;
-    var interval = setInterval(function(){
-        if(!intb){
-            intb = true;
-         //   document.getElementById('log').innerHTML += "WTF "+currentObj.genre_id
-            newTag(currentObj, 'genre');
-            if(currentObj["genre_id"] != undefined){
-               document.getElementById('log').innerHTML += "New "+currentObj["artist"]+" ("+currentObj["artist_id"]+")<br/>"
-                newTag(currentObj, 'artist');
-            }else if(currentObj.genre_id != null && currentObj.artist_id != null){
-                newTag(currentObj, 'album');
-            }else if(currentObj.genre_id != null&& currentObj.artist_id != null && currentObj.album_id != null){
-                newTrack(currentObj, 'track')
-                clearInterval(interval)
-            }
-            intb = false; i=i+1;
-        }
-    }, 1)
-}
-
-
-function nextRecord(obj, type){
-    var list = ["genre", "artist", "album", "track"]
-    var i = list[list.indexOf(type)+1]
-    if(i== "track"){
-        newTrack(obj, 'track')
-    }else{
-        newTag(obj, list[i]);
-    }
-
-}
-
-function getTrackIDs(currentObj){
-    /// Import tags into DB
-    currentObj["genre_id"] = false;
-    currentObj["artist_id"] = false;
-    currentObj["album_id"] = false;
-    var ii = false;
-    var ii_interval = setInterval(function(){
-        if(!ii){
-            ii = true;
-            if(currentObj && !currentObj["genre_id"]){
-                //  document.getElementById('log').innerHTML += "Genre = "+currentObj["genre"]+"<br/>"
-                newTag(currentObj, 'genre');
-            }else if(currentObj && currentObj["genre_id"] && !currentObj["artist_id"]){
-                newTag(currentObj, 'artist');
-            }else if(currentObj && currentObj["genre_id"] && currentObj["artist_id"]  && !currentObj["album_id"]){
-                newTag(currentObj, 'album');
-            }
-            // if(currentObj && currentObj["genre_id"]){
-            if(currentObj && currentObj["genre_id"] && currentObj["artist_id"] && currentObj["album_id"]){
-                document.getElementById('log').innerHTML += currentObj["name"]+" "+currentObj["genre_id"]+" "+currentObj["artist_id"]+" "+currentObj["album_id"]+"<br/>"
-                clearInterval(ii_interval)
-                return currentObj;
-            }
-            ii = false;
-        }
-    }, 5)
-    /// <----
-}
-
-function parseTrack(list, i){
-
-
-
-
-    if(currentObj){
-
-        if(currentObj && !currentObj["genre_id"]){
-
-            //  document.getElementById('log').innerHTML += "Genre = "+currentObj["genre"]+"<br/>"
-            newTag(currentObj, 'genre');
-            alert("Sourcing "+currentObj["name"]+" "+currentObj["genre_id"])
-            // currentObj["genre_id"] = currentID["genre"]
-
-        }else if(currentObj && currentObj["genre_id"] && !currentObj["artist_id"]){
-            newTag(currentObj, 'artist');
-        }else if(currentObj && currentObj["genre_id"] && currentObj["artist_id"]  && !currentObj["album_id"]){
-            newTag(currentObj, 'album');
-        }
-
-        if(currentObj && currentObj["genre_id"]){
-            //    if(currentObj && currentObj["genre_id"] && currentObj["artist_id"] && currentObj["album_id"]){
-            document.getElementById('log').innerHTML += currentObj["name"]+" "+currentObj["genre_id"]+" "+currentObj["artist_id"]+" "+currentObj["album_id"]+"<br/>"
-
-            alert(currentObj["name"]+" "+currentObj["genre_id"])
-
-            //   return currentObj;
-        }
-
-
-                newTag(currentObj, 'genre');
-                newTag(currentObj, 'artist');
-                newTag(currentObj, 'album');
-                document.getElementById("log").innerHTML += "Saved "+
-                    currentObj["genre"]+" ("+currentID["genre_id"]+"),"+
-                    currentObj["artist"]+" {"+currentID["artist_id"]+"),"+
-                    currentObj["album"]+" ("+currentID["album_id"]+")<br/>";
-
-        //      newTrack(obj);
-    }
-}
-
- */
