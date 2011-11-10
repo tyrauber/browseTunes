@@ -8,7 +8,7 @@ When linked into the head tag of an HTML file:
 
 browseTunes creates the familiar 'Genre -> Artist -> Album -> Track' Navigation system of the original iTunes. Drag and Drop or upload your exported iTunes Music Library and browseTunes parses the library into your browser's local storage. A Genre, Artist, Album and Track database is created to store the index locally of all your content.  Browse content by clicking on any of the Genre, Artist or Album Tags and play content by clicking on the Track.
 
-![browseTunes plays audio and video](browseTunes.jpg "browseTunes")
+![browseTunes plays audio and video](browseTunes/raw/master/browseTunes.jpg "browseTunes")
 
 ## Note: Currently only works in Webkit. Will work in Chrome if I can get around file:/// sandboxing. Firefox doesn't seem to support Local Storage yet. Damn.
 
